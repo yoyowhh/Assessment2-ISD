@@ -5,46 +5,45 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Paket {
-
-    private ArrayList<Paket> daftarPaket;
+    private ArrayList<Kiriman> daftarKiriman;
     private Map<String, Integer> prioritasTipe;
-    
-    public Paket() {
-        this.daftarPaket = new ArrayList<>();
-        this.prioritasTipe = new HashMap<>();
-        prioritasTipe.put("Biasa", 1);
-        prioritasTipe.put("Express", 2);
-        prioritasTipe.put("Kilat", 3);
-        prioritasTipe.put("Same Day", 4);
 
+    public Paket() {
+        this.daftarKiriman = new ArrayList<>();
+        this.prioritasTipe = new HashMap<>();
+        prioritasTipe.put("biasa", 1);
+        prioritasTipe.put("express", 2);
+        prioritasTipe.put("kilat", 3);
+        prioritasTipe.put("Same Day", 4);
     }
 
-    public void terimaKiriman(int idPelanggan, String namaPelanggan, int tanggalmasuk, String tipePaket, String alamat) {
-        Paket paketBaru = new Paket(idPelanggan, namaPelanggan, tanggalmasuk, tipePaket, alamat);
-        this.daftarPaket.add(paketBaru);
+    public void terimaKiriman(int idPaket, String namaPelanggan, int tanggalMasuk, String tipePaket, String alamat) {
+        Kiriman kirimanBaru = new Kiriman(idPaket, namaPelanggan, tanggalMasuk, tipePaket, alamat);
+        this.daftarKiriman.add(kirimanBaru);
     }
 
     public void urutanPaket() {
-        Collections.sort(this.daftarPaket, new Comparator<Paket>() {
+        Collections.sort(this.daftarKiriman, new Comparator<Kiriman>() {
             @Override
-            public int compare(Paket p1, Paket p2) {
-                int prioritas1 = prioritasTipe.getOrDefault(p1.getTipePaket(), Integer.MAX_VALUE);
-                int prioritas2 = prioritasTipe.getOrDefault(p2.getTipePaket(), Integer.MAX_VALUE);
+            public int compare(Kiriman k1, Kiriman k2) {
+                int prioritas1 = prioritasTipe.getOrDefault(k1.getTipePaket().toLowerCase(), Integer.MAX_VALUE);
+                int prioritas2 = prioritasTipe.getOrDefault(k2.getTipePaket().toLowerCase(), Integer.MAX_VALUE);
 
                 if (prioritas1 != prioritas2) {
-                    return Integer.compare(prioritas1, prioritas2);
+                    return Integer.compare(prioritas2, prioritas1); // Urutan descending (prioritas tinggi dulu)
                 } else {
-                    return Integer.compare(p1.getTanggalMasuk(), p2.getTanggalMasuk());
+                    return Integer.compare(k1.getTanggalMasuk(), k2.getTanggalMasuk());
                 }
             }
         });
     }
 
     public void tampilanUrut() {
-        System.out.println("Urutan Paket harus diselesaikan: ");
-        for (Paket paket : daftarPaket) {
-            System.out.println("Id Paket: " + paket.getIdPaket() + ", Nama Pelanggan: " + paket.getNamaPelanggan() + ", Tanggal Masuk: " + paket.getTanggalMasuk()
-                    + ", Tipe Paket: " + paket.getTipePaket() + ", Alamat: " + paket.getAlamat());
+        System.out.println("Urutan paket harus diselesaikan:");
+        for (Kiriman kiriman : daftarKiriman) {
+            System.out.println("ID Paket: " + kiriman.getIdPaket() + 
+                             " namaPelanggan: " + kiriman.getNamaPelanggan() + 
+                             " alamatPelanggan: " + kiriman.getAlamat());
         }
     }
 }
